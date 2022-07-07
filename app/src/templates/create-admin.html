@@ -1,18 +1,19 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<title>Digital Notes</title>
+	<title>Admin Page - Create Admin</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
-
 <body>
 	<!-------------------------------------------- Navigation Bar --------------------------------------------------------------->
 	<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+		<ul class="navbar-nav mr-auto">
 		{% if session['user_category'] == 'administrator'%}
-			<ul class="navbar-nav mr-auto">
-				<a class="nav-time nav-link" href="/admin">Admin Page</a>
-			</ul>
+			<a class="nav-time nav-link" href="/admin">Admin Page</a>
 		{% endif %}
+			<a class="nav-time nav-link" href="/">Home</a>
+		</ul>
 		<ul class="navbar-nav ml-auto">
 			{% if session['username'] %}
 				<a class="nav-item nav-link" href="/logout">Log out {{session['username']}}</a>
@@ -23,31 +24,29 @@
 		</ul>
 	</nav>
 	<!-------------------------------------------------------------------------------------------------------------------------->
-
 	<div class="container mt-5">
 		<div class="row justify-content-center">
-			<h1>Digital Notes</h1>
+			<h1> Create Admin </h1>
 		</div>
-
-		<!------------------------------------------- Search Bar --------------------------------------------------------------->
-
 		<div class="row justify-content-center">
-			<form action="" method="get" class="form-inline d-flex justify-content-center md-form form-sm">
-				<input class="form-control form-control-sm" type="text" placeholder="Search" name="search" value='{{request.form.search}}' style="width: 50vw; height:45px; font-size:20">
+			<form action='' method='post'>
+				<input type='text' placeholder='Username' name='uname' value='{{request.form.uname}}'>
+				<br>
+				<input type='text' placeholder='Email' name='email' value='{{request.form.email}}'>
+				<br>
+				<input type='password' placeholder='Password' name='password' value='{{request.form.password}}'>
+				<br>
+				<input type='hidden' name='fullname' value='admin-name-placeholder'>
+				<br>
+				<input class='btn btn-light' type='submit' value='Register' style="margin-left:30%">
 			</form>
-			<br>
-			<a class="btn btn-dark text-white ml-1" href="/create-note" style="width: 50vw; height:45px; font-size:20">Create New Note</a>
-
 		</div>
 		{% if error %}
-			<div class="row justify-content-center">
-				<p class='error'>{{error}}
-			</div>
+		<div class="row justify-content-center mt-2">
+			<p class='error'>{{error}}
+		</div>
 		{% endif %}
-		<!---------------------------------------------------------------------------------------------------------------------->
-
-
 	</div>
-</body>
 
+</body>
 </html>
