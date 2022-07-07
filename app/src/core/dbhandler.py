@@ -7,7 +7,7 @@ except Exception as e:
     pass
 
 # Use Digital Notes database
-db = client.DigitalNotes
-users = db.users
+db = client["DigitalNotes"]
+users = db["users"]
 if not users.find_one({'email': 'admin@mail.com'}):  # Search for accounts using the same email
     users.insert_one({'email': 'admin@mail.com', 'password': 'admin', 'name': 'admin', 'category': 'administrator'})

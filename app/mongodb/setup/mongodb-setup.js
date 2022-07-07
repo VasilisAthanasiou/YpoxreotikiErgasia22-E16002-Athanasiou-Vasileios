@@ -4,5 +4,4 @@ db.createUser({
 	role:[
 		{role:"readWrite", db="admin"}
 	]
-
 });

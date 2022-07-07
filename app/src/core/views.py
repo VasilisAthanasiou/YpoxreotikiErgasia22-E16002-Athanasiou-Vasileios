@@ -62,8 +62,6 @@ def logout():
 @app.route('/admin', methods=['GET', 'POST'])
 def admin_page():
     error = None
-    session['screening_datetimes'] = ''
-    session['movie_id'] = None
     if session['user_category'] == 'administrator':  # Make sure that only an admin account can access this page
         return render_template('admin-page.html')
     else:
