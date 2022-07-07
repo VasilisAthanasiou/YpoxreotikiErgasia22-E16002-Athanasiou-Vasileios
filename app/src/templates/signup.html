@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Sign Up</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+</head>
+<body>
+	<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+		<ul class="navbar-nav mr-auto">
+			<a class="nav-item nav-link" href="/">Home</a>
+		</ul>
+	</nav>
+	<div class="container mt-5">
+		<div class="row justify-content-center">
+			<h1> Sign Up </h1>
+		</div>
+		<div class="row justify-content-center">
+			<form action='' method='post'>
+				<input type='text' placeholder='name' name='name' value='{{request.form.name}}'>
+				<br>
+				<input type='text' placeholder='e-mail' name='email' value='{{request.form.email}}'>
+				<br>
+				<input type='password' placeholder='password' name='password' value='{{request.form.password}}'>
+				<br>
+				<input class='btn btn-light' type='submit' value='Sign Up' style="margin-left:30%">
+			</form>
+		</div>
+		{% if error %}
+		<div class="row justify-content-center mt-2">
+			<p class='error'>{{error}}
+		</div>
+		{% endif %}
+	</div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<html>
+<head>
+	<title>Digital Notes</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+
+<body>
+	<!-------------------------------------------- Navigation Bar --------------------------------------------------------------->
+	<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+		{% if session['user_category'] == 'administrator'%}
+			<ul class="navbar-nav mr-auto">
+				<a class="nav-time nav-link" href="/admin">Admin Page</a>
+			</ul>
+		{% endif %}
+		<ul class="navbar-nav ml-auto">
+			{% if session['username'] %}
+				<a class="nav-item nav-link" href="/logout">Log out {{session['username']}}</a>
+			{% else %}
+				<a class="nav-item nav-link" href="/login">Login</a>
+				<a class="nav-item nav-link" href="/signup">Sign Up</a>
+			{% endif %}
+		</ul>
+	</nav>
+	<!-------------------------------------------------------------------------------------------------------------------------->
+
+	<div class="container mt-5">
+		<div class="row justify-content-center">
+			<h1>Digital Notes</h1>
+		</div>
+
+		<!------------------------------------------- Search Bar --------------------------------------------------------------->
+		<div class="row justify-content-center">
+			<form action="" method="get" class="form-inline d-flex justify-content-center md-form form-sm">
+				<input class="form-control form-control-sm" type="text" placeholder="Search" name="search" value='{{request.form.search}}' style="width: 50vw; height:45px; font-size:20">
+			</form>
+		</div>
+		{% if error %}
+			<div class="row justify-content-center">
+				<p class='error'>{{error}}
+			</div>
+		{% endif %}
+		<!---------------------------------------------------------------------------------------------------------------------->
+
+
+	</div>
+</body>
+
+</html>

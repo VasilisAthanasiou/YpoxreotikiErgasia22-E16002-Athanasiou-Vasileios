@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Admin Page</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+	<!-------------------------------------------- Navigation Bar --------------------------------------------------------------->
+	<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+		<ul class="navbar-nav mr-auto">
+			<a class="nav-time nav-link" href="/">Home</a>
+		</ul>
+		<ul class="navbar-nav ml-auto">
+			{% if session['username'] %}
+				<a class="nav-item nav-link" href="/logout">Log out {{session['username']}}</a>
+			{% else %}
+				<a class="nav-item nav-link" href="/login">Login</a>
+				<a class="nav-item nav-link" href="/signup">Sign Up</a>
+			{% endif %}
+		</ul>
+	</nav>
+	<!-------------------------------------------------------------------------------------------------------------------------->
+	<div class="container mt-5">
+		<div class="row justify-content-center">
+			<h1>Administrator Page</h1>
+		</div>
+		<div class="row justify-content-center">
+			<a class="btn btn-dark text-white" href="/insert">Insert Movie</a>
+			<a class="btn btn-dark text-white ml-1" href="/edit">Edit Movie</a>
+			<a class="btn btn-dark text-white ml-1" href="/create-admin">Create admin account</a>
+		</div>
+	</div>
+</body>
+</html>
