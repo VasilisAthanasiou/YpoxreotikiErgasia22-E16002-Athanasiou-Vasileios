@@ -16,6 +16,6 @@ if not users.find_one({'email': 'admin@mail.com'}):  # Search for accounts using
 
 notes = db["notes"]
 if not notes.find_one({'username': 'admin'}, {'title': 'admin-note'}):
-    note_id = notes.insert_one({'username': 'admin', 'title': 'admin-note', 'date': 'none', 'content': 'This is the default note', 'keywords': []})
+    note_id = notes.insert_one({'username': 'admin', 'title': 'admin-note', 'date': 'none', 'content': 'This is the default note', 'keywords': ""})
 
 

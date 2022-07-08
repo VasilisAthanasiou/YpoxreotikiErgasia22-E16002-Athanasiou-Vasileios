@@ -115,7 +115,7 @@ def create_note():
             title = '{}'.format(request.form['title'])
             date = '{}'.format(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
             content = '{}'.format(request.form['content'])
-            keywords = '{}'.format(request.form['keywords']).split(',')
+            keywords = '{}'.format(request.form['keywords'])
 
             are_filled = title != '' and content != '' and keywords != ''
 
@@ -124,7 +124,7 @@ def create_note():
                 if not notes.find_one({'username': session['username'], 'title': title}):  # Search if note already exists
                     print("Note of same title and username wasn't found")
                     if request.form['submit_button'] == 'Create':  # Check if the user clicked the Insert button
-                        notes.insert_one({'username': session['username'], 'title': title, 'date': date, 'content': content, 'keywords': []})  # Add note into database
+                        notes.insert_one({'username': session['username'], 'title': title, 'date': date, 'content': content, 'keywords': keywords})  # Add note into database
                     return redirect(url_for('home'))
                 else:
                     error = 'Note with the same title already exists for this user.'
@@ -145,27 +145,16 @@ def create_note():
 def home():
     text_results = None
     error = None
-    history_len = 0
-
-    # try:
-    #     history = users.find({'_id': ObjectId(session['uid'])}, {'movies_seen'})
-    #     history = list(history)
-    #     history = re.search('movies.{8}\[(.+)]}]', str(history))
-    #     if history:
-    #         history = history.group(1).split(',')
-    #         history_len = len(history)
-    # except KeyError:
-    #     session['uid'] = None
-    #     history = None
 
     if request.method == 'GET':
         # Get search query from search bar
         query = request.args.get('search')
+        option = request.args.get('search-option')
         # Execute query
         if query:
             try:
                 if session['username']:
-                    text_results, error = search_note(query)
+                    text_results, error = search_note(query, option)
                     if not error:
                         return redirect(url_for('note'))
                 else:
@@ -198,27 +187,33 @@ def create_user(category='user'):
     return False, error
 
 
-def search_note(query):
+def search_note(query, option):
     """
     Takes in a query and performs mongodb's text search on it.
     :param query: Query provided by the user
+    :param option : Decides whether to search for a title or a keyword
     :return:
     """
     error = None
-    text_results = notes.find_one({'$text': {'$search': query}})
-    if text_results is None:
-        error = 'No note matching your search criteria was found.'
-        session['note_id'] = None
-        session['note_title'] = None
-        session['note_date'] = None
-        session['note_content'] = None
-        session['note_keywords'] = ''
-        return None, error
-    session['note_id'] = re.search("'_id':\sObjectId\('(.+)'\)", str(text_results)).group(1)
-    session['note_title'] = re.search("['\"]title['\"]:\s['\"](.+)['\"],\s'date'", str(text_results)).group(1)
-    session['note_date'] = re.search("['\"]date['\"]:\s['\"](.+)['\"],\s['\"]content['\"]", str(text_results)).group(1)
-    session['note_content'] = re.search("['\"]content['\"]:\s['\"](.+)',\s'keywords", str(text_results)).group(1)
-    session['note_keywords'] = re.search("'keywords':\s\[({.+)]", str(text_results)).group(1)
+    if option == "keyword":  # Check if keyword search is enabled
+        text_results = notes.find({"keywords": {"$elemMatch": query}})
+        print(text_results)
+    else:  # Search using title
+        text_results = notes.find_one({'$and': [{'username': session['username']}, {'title': query}]})
+        if text_results is None:
+            error = 'No note matching your search criteria was found.'
+            session['note_id'] = None
+            session['note_title'] = None
+            session['note_date'] = None
+            session['note_content'] = None
+            session['note_keywords'] = ''
+            return None, error
+
+        session['note_id'] = re.search("'_id':\sObjectId\('(.+)'\)", str(text_results)).group(1)
+        session['note_title'] = re.search("['\"]title['\"]:\s['\"](.+)['\"],\s'date'", str(text_results)).group(1)
+        session['note_date'] = re.search("['\"]date['\"]:\s['\"](.+)['\"],\s['\"]content['\"]", str(text_results)).group(1)
+        session['note_content'] = re.search("['\"]content['\"]:\s['\"](.+)',\s'keywords", str(text_results)).group(1)
+        session['note_keywords'] = re.search("['\"]keywords['\"]:\s['\"](.+)'", str(text_results)).group(1)
     return text_results, error
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------- #
